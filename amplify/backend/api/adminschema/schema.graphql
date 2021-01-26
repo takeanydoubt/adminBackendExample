@@ -1,0 +1,67 @@
+type Course @model @auth(rules: [{ allow: owner, queries: null }]) {
+  id: ID!
+  name: String!
+  subjects: [Subject] @connection(name: "courseSubject")
+}
+
+type Subject @model {
+  id: ID!
+  name: String!
+  course: Course @connection(name: "courseSubject")
+  level: Level @connection(name: "subjectLevel")
+  tutors: [TutorSubjectJoin] @connection(name: "TutorSubjectJoin")
+  students: [SubjectStudentJoin] @connection(name: "SubjectStudentJoin")
+}
+
+type Level @model {
+  id: ID!
+  name: String!
+  subjects: [Subject] @connection(name: "subjectLevel")
+}
+
+type Tutor @model {
+  id: ID!
+  first_name: String!
+  last_name: String!
+  email: String!
+  phone: String!
+  country: String!
+  date_birth: String!
+  gender: String!
+  ocupation: String!
+  education: String
+  tutoring_preference: String!
+  subejcts: [TutorSubjectJoin] @connection(name: "SubjectTutorJoin")
+  students: [TutorStudentJoin] @connection(name: "TutorStudentJoin")
+}
+
+type TutorSubjectJoin @model {
+  id: ID!
+  subejct: Subject @connection(name: "TutorSubjectJoin")
+  tutor: Tutor @connection(name: "SubjectTutorJoin")
+}
+
+type Student @model {
+  id: ID!
+  first_name: String!
+  last_name: String!
+  email: String!
+  date_birth: String!
+  phone: String!
+  country: String!
+  gender: String!
+  subjects: [SubjectStudentJoin] @connection(name: "StudendSubjectJoin")
+  tutors: [TutorStudentJoin] @connection(name: "StudentTutorJoin")
+}
+
+type SubjectStudentJoin @model {
+  id: ID!
+  subejct: Subject @connection(name: "SubjectStudentJoin")
+  student: Student @connection(name: "StudendSubjectJoin")
+}
+
+type TutorStudentJoin @model {
+  id: ID!
+  tutor: Tutor @connection(name: "TutorStudentJoin")
+  student: Student @connection(name: "StudentTutorJoin")
+}
